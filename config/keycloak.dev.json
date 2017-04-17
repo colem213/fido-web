@@ -1,0 +1,8 @@
+{
+  "realm": "fido",
+  "auth-server-url": "http://localhost:30303/auth",
+  "url": "http://localhost:30303/auth",
+  "ssl-required": "external",
+  "resource": "public",
+  "public-client": true
+}
