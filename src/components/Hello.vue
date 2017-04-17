@@ -3,7 +3,7 @@
     <h1>{{ msg }}</h1>
     <h2>Fido Links</h2>
     <ul>
-      <li>{{registrationUrl()}}</li>
+      <li><a :href="registrationUrl()">Register</a></li>
     </ul>
     <h2>Essential Links</h2>
     <ul>
@@ -34,8 +34,7 @@ export default {
   },
   methods: {
     registrationUrl: function () {
-      console.log(this)
-      return 'text'
+      return this.$auth.createRegisterUrl()
     }
   }
 }

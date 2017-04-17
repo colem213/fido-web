@@ -1,17 +1,15 @@
 import Keycloak from 'keycloak-js'
 
-let auth
+let kc
 
-export default class Auth {
-
-}
-
-export function install (Vue, options) {
+function install (Vue) {
   let config = Vue.config.keycloakConfig
   config.url = config.authServerUrl
-  auth = Keycloak(Vue.config.keycloakConfig)
-  auth.init()
-  Vue.$auth = auth
+  kc = this(config)
+  kc.init()
+  Object.defineProperty(Vue.prototype, '$auth', {
+    get () { return kc }
+  })
 }
 
 export function sync (router) {
@@ -19,7 +17,7 @@ export function sync (router) {
     if (to.matched.some(record => record.meta.requiresAuth)) {
       // this route requires auth, check if logged in
       // if not, redirect to login page.
-      if (!auth.loggedIn()) {
+      if (kc.authenticated) {
         next({
           path: '/login',
           query: { redirect: to.fullPath }
@@ -33,4 +31,6 @@ export function sync (router) {
   })
 }
 
-Auth.install = install
+Keycloak.install = install
+
+export default Keycloak
