@@ -6,7 +6,7 @@ function install (Vue) {
   let config = Vue.config.keycloakConfig
   config.url = config.authServerUrl
   kc = this(config)
-  kc.init()
+  kc.init({responseMode: 'query'})
   Object.defineProperty(Vue.prototype, '$auth', {
     get () { return kc }
   })
