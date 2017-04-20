@@ -7,9 +7,7 @@ import auth from './auth'
 
 Vue.config.productionTip = false
 
-Vue.config.keycloakConfig = process.env.KC_CONFIG
 // sync(router)
-Vue.use(auth)
 
 /* eslint-disable no-new */
 new Vue({

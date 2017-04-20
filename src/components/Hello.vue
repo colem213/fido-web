@@ -2,9 +2,12 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <h2>Fido Links</h2>
+    <p v-if="authenticated">You are logged in!</p>
+    <p v-else>Please log in!</p>
     <ul>
-      <li><a :href="loginUrl()">Login</a></li>
-      <li><a :href="registrationUrl()">Register</a></li>
+      <li><a :href="this.$auth.createLoginUrl()">Login</a></li>
+      <li><a :href="this.$auth.createAccountUrl()">Account</a></li>
+      <li><a :href="this.$auth.createRegisterUrl()">Register</a></li>
     </ul>
     <h2>Essential Links</h2>
     <ul>
@@ -31,15 +34,6 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
-    }
-  },
-  methods: {
-    registrationUrl: function () {
-      return this.$auth.createRegisterUrl()
-    },
-    loginUrl: function () {
-      console.log(this.$auth)
-      return this.$auth.createLoginUrl()
     }
   }
 }
