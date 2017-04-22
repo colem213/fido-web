@@ -1,34 +1,37 @@
 import Keycloak from 'keycloak-js'
+import store from 'store'
+import expirePlugin from 'store/plugins/expire'
 
-let kc
+store.addPlugin(expirePlugin)
+
+let config = process.env.KC_CONFIG
+config.url = config.authServerUrl
+const kc = Keycloak(config)
+
+export const initOptions = Object.assign({}, getAuth(), { responseMode: 'query' })
+
+export function getAuth () {
+  let data = store.get('fido-auth')
+  if (data === undefined) {
+    return undefined
+  }
+  return JSON.parse(data)
+}
+
+export function setAuth () {
+  if (kc.refreshToken) {
+    let data = JSON.stringify({ token: kc.token, idToken: kc.idToken, refreshToken: kc.refreshToken })
+    const expiresAt = ((kc.refreshTokenParsed['exp'] - (new Date().getTime() / 1000) + (kc.timeSkew ? kc.timeSkew : 0)) * 1000) + new Date().getTime()
+    store.set('fido-auth', data, expiresAt)
+  }
+}
 
 function install (Vue) {
-  let config = process.env.KC_CONFIG
-  config.url = config.authServerUrl
-  kc = this(config)
-  let initOptions = { responseMode: 'query' }
-  if (localStorage !== undefined) {
-    initOptions = Object.assign({}, JSON.parse(localStorage.getItem('fido-auth')), initOptions)
-  }
-  kc.init(initOptions).success(function (authenticated) {
-    if (authenticated) {
-      if (localStorage !== undefined) {
-        localStorage.setItem('fido-auth', JSON.stringify({ token: kc.token, idToken: kc.idToken, refreshToken: kc.refreshToken }))
-      }
-    }
-  })
   Object.defineProperty(Vue.prototype, '$auth', {
     get () { return kc }
   })
-  Vue.mixin({
-    data () {
-      return {
-        authenticated: false
-      }
-    }
-  })
 }
 
-Keycloak.install = install
+kc.install = install
 
-export default Keycloak
+export default kc
