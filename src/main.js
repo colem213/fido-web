@@ -4,7 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import store from './store'
 import router from './router'
-import auth from './auth'
 
 Vue.config.productionTip = false
 
@@ -15,7 +14,9 @@ new Vue({
   el: '#app',
   store,
   router,
-  auth,
+  created () {
+    this.$store.dispatch('initAuth', store)
+  },
   template: '<App/>',
   components: { App }
 })

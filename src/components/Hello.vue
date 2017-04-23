@@ -2,12 +2,13 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <h2>Fido Links</h2>
-    <p v-if="user.authenticated">Welcome, {{user.name}}!</p>
+    <p v-if="user.authenticated">Welcome, {{ user.name }}!</p>
     <p v-else>Please log in!</p>
     <ul>
-      <li v-if="!user.authenticated"><a :href="this.$auth.createLoginUrl()">Login</a></li>
-      <li v-if="user.authenticated"><a :href="this.$auth.createAccountUrl()">Account</a></li>
-      <li v-if="!user.authenticated"><a :href="this.$auth.createRegisterUrl()">Register</a></li>
+      <li v-if="!user.authenticated"><a :href="auth.createLoginUrl()">Login</a></li>
+      <li v-if="!user.authenticated"><a :href="auth.createRegisterUrl()">Register</a></li>
+      <li v-if="user.authenticated"><a :href="auth.createAccountUrl()">Account</a></li>
+      <li v-if="user.authenticated"><a :href="auth.createLogoutUrl()">Logout</a></li>
     </ul>
     <h2>Essential Links</h2>
     <ul>
@@ -29,14 +30,21 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
 
 export default {
   name: 'hello',
   computed: {
-    ...mapGetters({
-      user: 'user'
-    })
+    auth () {
+      return this.$store.getters.auth
+    },
+    user () {
+      return this.$store.getters.user
+    }
+    // ...mapGetters({
+    //   auth: 'auth',
+    //   user: 'user'
+    // })
   },
   data () {
     return {

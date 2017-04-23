@@ -1,2 +1,2 @@
-export const LOGIN = 'LOGIN'
-export const LOGOUT = 'LOGOUT'
+export const UPDATED_AUTH = 'UPDATED_AUTH'
+export const UPDATED_USER = 'UPDATED_USER'
