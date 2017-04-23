@@ -1,0 +1,2 @@
+export const UPDATED_AUTH = 'UPDATED_AUTH'
+export const UPDATED_USER = 'UPDATED_USER'
